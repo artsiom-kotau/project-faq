@@ -1,31 +1,21 @@
 {
-  "settings" : {
-    "analysis" : {
-      "analyzer" : {
-        "left" : {
-          "filter" : [
-            "standard",
-            "lowercase",
-            "stop"
-          ],
-          "type" : "custom",
-          "tokenizer" : "customEdgeNGram"
-        },
-        "right" : {
-          "filter" : [
-            "standard",
-            "lowercase",
-            "stop",
-            "reverse"
-          ],
-          "type" : "custom",
-          "tokenizer" : "customEdgeNGram"
+  "settings": {
+    "analysis": {
+      "filter": {
+        "autocomplete_filter": {
+          "type": "edge_ngram",
+          "min_gram": 1,
+          "max_gram": 20
         }
       },
-      "tokenizer" : {
-        "customEdgeNGram" : {
-          "max_gram" : 20,
-          "type" : "edgeNGram"
+      "analyzer": {
+        "autocomplete": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "autocomplete_filter"
+          ]
         }
       }
     }
@@ -37,11 +27,9 @@
       },
       "properties": {
         "title": {
-          "fields":{
-            "title": {"type": "string", "analyzer": "left"},
-            "reverse_title": {"type": "string", "analyzer": "right"}
-          },
-          "type" : "multi_field"
+          "type": "string",
+          "analyzer":  "autocomplete",
+          "search_analyzer": "standard"
         },
         "author": {
           "type": "string",
